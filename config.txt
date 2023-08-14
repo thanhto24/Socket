@@ -1,0 +1,7 @@
+cache_time = 900
+max_receive=4090
+whitelisting_enable=False
+whitelisting=vbsca.ca, example.com,oosc.online
+time_restriction=False
+time=8-20
+timeout=900
