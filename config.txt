@@ -1,7 +1,5 @@
-cache_time = 900
-max_receive=4090
-whitelisting_enable=False
-whitelisting=vbsca.ca, example.com,oosc.online
-time_restriction=False
-time=8-20
-timeout=900
+Method: GET, HEAD, POS
+Whitelist: example.com, fb.com
+Time: 11:00 - 22:30
+Cache_type: apng, avif, gif, jpeg, jpg, png, svg, webp
+Cache_time: 1
