@@ -47,8 +47,12 @@ def Validate(request, config, message):
         print(1)
         return False
 
+    strRequest = request.decode()
+    # ["GET", "/path", "HTTP/1.1", "Host:", "example.com"]
+
     # Method
-    method = request.decode().split()[0]
+
+    method = strRequest.split()[0]
     if method not in config.methods:
         message[0] = 'Invalid method'
         print(2, end='\n')
@@ -56,7 +60,10 @@ def Validate(request, config, message):
         return False
 
     # Whitelist
-    hostn = request.decode().split()[4].replace('www.', '')
+    hostn = strRequest.split()[4]
+    if 'www.' in hostn:
+        hostn = hostn.replace('www.', '')
+
     if hostn not in config.whitelist:
         message[0] = 'You are not allowed to access this page'
         print(3, end='\n')
