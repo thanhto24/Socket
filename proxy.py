@@ -64,7 +64,10 @@ def Validate(request, config, message):
         return False
 
     # Time
-    now = datetime.now().time().strftime("%H:%M")
+    now = str(datetime.now().time())
+    hour_now = now.split(":")[0]
+    mins_now = now.split(":")[1]
+    now = hour_now + ":" + mins_now
     if now < config.start_time or now > config.end_time:
         message[0] = 'You are not allowed to access this page at this moment'
         print(4, end='\n')
@@ -95,7 +98,8 @@ def ProcessProxy(client ,address):
     message = ['']
     print(req.decode())
     if (Validate(req, request_config, message)):
-        print(message)
+         print('Sending request for', req.decode().split()[1])
+    print(message, end='\n')
     # else:
     #     print("Validation failed:", error_message[0])
     #     webbrowser.open_new_tab('error.html') # open 403 when meets the invalid time, link: https://www.guru99.com/accessing-internet-data-with-python.html
@@ -127,4 +131,6 @@ Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate
 Connection: keep-alive
 Upgrade-Insecure-Requests: 1
+If-Modified-Since: Thu, 17 Oct 2019 07:18:26 GMT
+If-None-Match: "3147526947"
 '''

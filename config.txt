@@ -1,5 +1,5 @@
 Method: GET, HEAD, POS
-Whitelist: example.com, fb.com, bing.com
-Time: 8:00 - 22:30
+Whitelist: oosc.online, example.com, google.com
+Time: 08:00 - 22:30
 Cache_type: apng, avif, gif, jpeg, jpg, png, svg, webp
 Cache_time: 1
