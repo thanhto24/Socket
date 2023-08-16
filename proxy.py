@@ -1,5 +1,11 @@
 from socket import *
 from datetime import datetime
+from threading import *
+import webbrowser
+
+# Host and Port
+HOST = ''
+PORT = 8000
 
 class RequestConfig:
     def __init__(self, methods, whitelist, start_time, end_time, cache_types, cache_time):
@@ -34,30 +40,38 @@ def parse_request_config(file_path):
     return RequestConfig(methods, whitelist, start_time, end_time, cache_types, cache_time)
 
 
-def validate(request, config, message):
+def Validate(request, config, message):
     # Empty request
     if not request:
         message[0] = 'Empty request'
+        print(1)
         return False
 
     # Method
     method = request.decode().split()[0]
     if method not in config.methods:
         message[0] = 'Invalid method'
+        print(2, end='\n')
+        print(method, end='\n')
         return False
 
     # Whitelist
     hostn = request.decode().split()[4].replace('www.', '')
     if hostn not in config.whitelist:
         message[0] = 'You are not allowed to access this page'
+        print(3, end='\n')
+        print(hostn, end='\n')
         return False
 
     # Time
     now = datetime.now().time().strftime("%H:%M")
     if now < config.start_time or now > config.end_time:
         message[0] = 'You are not allowed to access this page at this moment'
+        print(4, end='\n')
+        print(now, config.start_time, config.end_time)
+        print(end='\n')
         return False
-
+    print(5)
     # Accept
     return True
 
@@ -74,11 +88,43 @@ request = b"POS /path HTTP/1.1\r\nHost: example.com\r\n\r\n"
 error_message = [None]
 
 # Validate the request using the configuration
-is_valid = validate(request, request_config, error_message)
+# is_valid = Validate(request, request_config, error_message)
 
-# Print validation result and error message
-if is_valid:
-    print("Request is valid.")
-else:
-    print("Validation failed:", error_message[0])
+def ProcessProxy(client ,address):
+    req = client.recv(4096)
+    message = ['']
+    print(req.decode())
+    if (Validate(req, request_config, message)):
+        print(message)
+    # else:
+    #     print("Validation failed:", error_message[0])
+    #     webbrowser.open_new_tab('error.html') # open 403 when meets the invalid time, link: https://www.guru99.com/accessing-internet-data-with-python.html
+    return
 
+#create a server
+socServer = socket(AF_INET, SOCK_STREAM)
+
+try:
+    socServer.bind((HOST, PORT))
+except:
+    print("Binded Failed")
+
+print("Socket binding operation completed")
+
+socServer.listen()
+print("Listening ...")
+
+while True:
+    clientSocket, address = socServer.accept()
+    Thread(target = ProcessProxy, args = [clientSocket, address]).start()
+    
+'''
+GET http://example.com/ HTTP/1.1
+Host: example.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+'''
