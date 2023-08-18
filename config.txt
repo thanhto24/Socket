@@ -1,5 +1,5 @@
 Method: GET, HEAD, POS
-Whitelist: oosc.online, example.com, google.com
-Time: 01:00 - 24:00
-Cache_type: apng, avif, gif, jpeg, jpg, png, svg, webp
+Whitelist: example.com, oosc.online, vbsca.ca, google.com, bing.com
+Time: 08:00 - 20:00
+Cache_type: apng, avif, gif, jpeg, jpg, jfif, pjp, png, svg, webp, bmp, ico, cur, tif, tiff
 Cache_time: 1
