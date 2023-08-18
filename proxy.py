@@ -48,7 +48,7 @@ def releaseCache(caches):
         current_time = datetime.now()
         for cache in caches:
             if current_time > cache['time']:
-                os.remove('_pycache_/' + cache['name'])
+                os.remove('pycache/' + cache['name'])
         time.sleep(30)
 
 # Function to validate request
@@ -115,7 +115,7 @@ def ProcessProxy(client, caches):
             cacheName = pathName.replace('http://', '').replace('/', '')
             
             try:
-                fileCache = open('_pycache_/' + cacheName, 'rb')
+                fileCache = open('pycache/' + cacheName, 'rb')
                 print('Founded ', pathName, 'in cache')
                 
                 responseBrowser = fileCache.read()
@@ -137,7 +137,7 @@ def ProcessProxy(client, caches):
                 # Read type caches
                 typeCache = pathName.split('.')[-1]
                 if typeCache in request_config.cache_types:
-                    cache = open('_pycache_/' + cacheName, 'wb')
+                    cache = open('pycache/' + cacheName, 'wb')
                     caches.append({
                         'name': cacheName,
                         'time': datetime.now() + timedelta(minutes = int(request_config.cache_time))                        
@@ -169,8 +169,8 @@ def ProcessProxy(client, caches):
 #create a server
 socServer = socket(AF_INET, SOCK_STREAM)
 
-for file in os.listdir('_pycache_'):
-    os.remove('_pycache_/' + file)
+for file in os.listdir('pycache'):
+    os.remove('pycache/' + file)
 
 caches = []
 cacheThread = Thread(target = releaseCache, args = [caches])
